@@ -26,8 +26,8 @@ jobs:
 
     - name: Update Local Repo
       run: |
-        $serverAddress = ${{ secrets.STW2_IP }}
-        $serverUser = ${{ secrets.STW2_USER }}
-        $localRepoPath = ${{ secrets.STW2_FILE_PATH }}
+        $serverAddress = "${{ secrets.STW2_IP }}"
+        $serverUser = "${{ secrets.STW2_USER }}"
+        $localRepoPath = '${{ secrets.STW2_FILE_PATH }}'
         ssh $serverUser@$serverAddress "cd $localRepoPath && git pull origin main"
         
