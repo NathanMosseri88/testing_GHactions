@@ -1,0 +1,33 @@
+name: Testing CI/CD to STW2
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  update-local-repo:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up SSH keys
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.STW2_KEY }}
+
+    - name: Use SSH key
+      uses: actions/setup-ssh@v2
+      with:
+        ssh-private-key: ${{ secrets.STW2_KEY }}
+
+    - name: Update Local Repo
+      run: |
+        $serverAddress = ${{ secrets.STW2_IP }}
+        $serverUser = ${{ secrets.STW2_USER }}
+        $localRepoPath = ${{ secrets.STW2_FILE_PATH }}
+        ssh $serverUser@$serverAddress "cd $localRepoPath && git pull origin main"
+        
