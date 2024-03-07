@@ -41,5 +41,8 @@ jobs:
     
         # Run SSH command
         Invoke-Expression -Command $sshCommand
+
+        Write-Host "Clossing SSH Session"
+        exit
         
         
