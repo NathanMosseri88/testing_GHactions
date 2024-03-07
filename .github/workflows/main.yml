@@ -19,11 +19,6 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.STW2_KEY }}
 
-    # - name: Use SSH key
-    #   uses: actions/setup-ssh@v2
-    #   with:
-    #     ssh-private-key: ${{ secrets.STW2_KEY }}
-
     - name: Update Local Repo
       run: |
         $serverAddress = "${{ secrets.STW2_IP }}"
