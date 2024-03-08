@@ -26,7 +26,7 @@ jobs:
         Write-Host "Local Repo Path: $localRepoPath"
 
         Write-Host "Adding key to file"
-        echo "${{ secrets.STW2_KEY }}">> $HOME/.ssh/STW2
+        echo "${{ secrets.STW2_KEY }}" > $HOME/.ssh/STW2
         
         # Log SSH command
         $sshCommand = ssh -v -i $HOME/.ssh/STW2 $serverUser@$serverAddress "cd $localRepoPath && git pull origin main"
