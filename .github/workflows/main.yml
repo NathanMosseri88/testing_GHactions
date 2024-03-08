@@ -19,6 +19,9 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.STW2_KEY }}
 
+    - name: Update known_hosts
+      run: Remove-Item $HOME/.ssh/known_hosts; echo "$serverAddress ssh-ed25519 ${{ secrets.SSH_SERVER_KEY }}" >> $HOME/.ssh/known_hosts
+
     - name: Update Local Repo
       run: |
         $serverAddress = "${{ secrets.STW2_IP }}"
