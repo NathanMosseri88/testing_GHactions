@@ -29,7 +29,8 @@ jobs:
         echo "$serverAddress ssh-ed25519 $(echo '${{ secrets.STW2_KEY }}' | base64 -d)" >> $HOME/.ssh/known_hosts
         
         # Save private key to a file
-        echo '${{ secrets.STW2_KEY }}' | base64 -d > $HOME/.ssh/private_key
+        $privateKeyContent = '${{ secrets.STW2_KEY }}' -replace '\r?\n', ''
+        $privateKeyContent | base64 -d | Out-File -FilePath "$HOME/.ssh/private_key" -Encoding ASCII
     
         # Log SSH command
         $sshCommand = "ssh -i $HOME/.ssh/private_key -o BatchMode=yes -o StrictHostKeyChecking=yes $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
