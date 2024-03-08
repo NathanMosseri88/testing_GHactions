@@ -26,7 +26,7 @@ jobs:
         Write-Host "Local Repo Path: $localRepoPath"
         
         # Log SSH command
-        $sshCommand = "ssh -v -i ${{secrets.STW2_KEY}} $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
+        $sshCommand = ssh -v -i ${{secrets.STW2_KEY}} $serverUser@$serverAddress "cd $localRepoPath && git pull origin main"
         Write-Host "Running SSH command: $sshCommand"
     
         # Run SSH command
