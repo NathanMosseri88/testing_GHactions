@@ -31,7 +31,7 @@ jobs:
         # Log SSH command
         echo "${{ secrets.STW2_KEY }}" > $HOME/.ssh/STW2/private_key
         
-        $sshCommand = ssh -v -i $HOME/.ssh/STW2/private_key $serverUser@$serverAddress "cd $localRepoPath && git pull origin main"
+        $sshCommand = ssh -v -i $HOME/.ssh/STW2/private_key -o BatchMode=yes $serverUser@$serverAddress "cd $localRepoPath && git pull origin main"
         Write-Host "Running SSH command: $sshCommand"
     
         # Run SSH command
