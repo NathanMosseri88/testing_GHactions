@@ -25,8 +25,14 @@ jobs:
         Write-Host "Server User: $serverUser"
         Write-Host "Local Repo Path: $localRepoPath"
         
+        mkdir -p $HOME/.ssh
+        echo "$serverAddress ssh-ed25519 $(echo '${{ secrets.STW2_KEY }}' | base64 -d)" >> $HOME/.ssh/known_hosts
+        
+        # Save private key to a file
+        echo '${{ secrets.STW2_KEY }}' | base64 -d > $HOME/.ssh/private_key
+    
         # Log SSH command
-        $sshCommand = "ssh -i <(echo '${{ secrets.STW2_KEY }}') -o BatchMode=yes -o StrictHostKeyChecking=yes $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
+        $sshCommand = "ssh -i $HOME/.ssh/private_key -o BatchMode=yes -o StrictHostKeyChecking=yes $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
         Write-Host "Running SSH command: $sshCommand"
     
         # Run SSH command
