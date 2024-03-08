@@ -14,11 +14,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Set up SSH keys
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: "${{ secrets.STW2_KEY }}"
-
     - name: Update Local Repo
       run: |
         $serverAddress = "${{ secrets.STW2_IP }}"
@@ -29,6 +24,8 @@ jobs:
         Write-Host "Server Address: $serverAddress"
         Write-Host "Server User: $serverUser"
         Write-Host "Local Repo Path: $localRepoPath"
+
+        echo "${{ secrets.STW2_KEY }}" > C:\\Users\\runneradmin/.ssh/id_ed25519
         
         # Log SSH command
         $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
