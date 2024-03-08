@@ -1,0 +1,40 @@
+name: Testing CI/CD to STW2
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  update-local-repo:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Create SSH Key File
+      run: |
+        mkdir -p $HOME/.ssh
+        echo '${{secrets.STW2_KEY}}' > $HOME/.ssh/id_ed25519
+        chmod 600 $HOME/.ssh/id_ed25519
+
+    - name: Update Local Repo
+      run: |
+        $serverAddress = "${{ secrets.STW2_IP }}"
+        $serverUser = "${{ secrets.STW2_USER }}"
+        $localRepoPath = '${{ secrets.STW2_FILE_PATH }}'
+        
+        # Log server details for debugging
+        Write-Host "Server Address: $serverAddress"
+        Write-Host "Server User: $serverUser"
+        Write-Host "Local Repo Path: $localRepoPath"
+        
+        # Log SSH command
+        $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
+        Write-Host "Running SSH command: $sshCommand"
+    
+        # Run SSH command
+        Invoke-Expression -Command $sshCommand
+        exit
