@@ -14,6 +14,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Create SSH Key File
+      run: |
+        mkdir -p $HOME/.ssh
+        echo '${{secrets.STW2_KEY}}' > $HOME/.ssh/id_ed25519
+        chmod 600 $HOME/.ssh/id_ed25519
+
     - name: Update Local Repo
       run: |
         $serverAddress = "${{ secrets.STW2_IP }}"
@@ -24,8 +30,6 @@ jobs:
         Write-Host "Server Address: $serverAddress"
         Write-Host "Server User: $serverUser"
         Write-Host "Local Repo Path: $localRepoPath"
-
-        echo "${{ secrets.STW2_KEY }}" > C:\\Users\\runneradmin/.ssh/id_ed25519
         
         # Log SSH command
         $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
