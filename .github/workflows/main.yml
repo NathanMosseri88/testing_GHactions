@@ -26,10 +26,12 @@ jobs:
         Write-Host "Local Repo Path: $localRepoPath"
 
         Write-Host "Adding key to file"
-        echo "${{ secrets.STW2_KEY }}" > $HOME/.ssh/STW2
-        
+        New-Item -ItemType Directory -Force -Path $HOME/.ssh/STW2
+    
         # Log SSH command
-        $sshCommand = ssh -v -i $HOME/.ssh/STW2 $serverUser@$serverAddress "cd $localRepoPath && git pull origin main"
+        echo "${{ secrets.STW2_KEY }}" > $HOME/.ssh/STW2/private_key
+        
+        $sshCommand = ssh -v -i $HOME/.ssh/STW2/private_key $serverUser@$serverAddress "cd $localRepoPath && git pull origin main"
         Write-Host "Running SSH command: $sshCommand"
     
         # Run SSH command
