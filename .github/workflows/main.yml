@@ -14,10 +14,14 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Set up SSH keys
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.STW2_KEY }}
+    - name: Setup Native Windows SSH Agent
+      run: |
+        echo "Starting SSH agent..."
+        ssh-agent -k
+        ssh-add -L || echo "No identities added. Trying to add default key..."
+        echo "Adding SSH key to the agent..."
+        echo "${{ secrets.STW2_KEY }}" > ssh_key.pem
+        ssh-add ssh_key.pem || echo "No default key found."
 
     - name: List SSH 
       run: |
