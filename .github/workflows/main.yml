@@ -14,6 +14,11 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+    - name: Set up SSH keys
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.STW2_KEY }}
+
     - name: Update Local Repo
       run: |
         $serverAddress = "${{ secrets.STW2_IP }}"
@@ -25,20 +30,9 @@ jobs:
         Write-Host "Server User: $serverUser"
         Write-Host "Local Repo Path: $localRepoPath"
         
-        mkdir -p $HOME/.ssh
-        echo "$serverAddress ssh-ed25519 $(echo '${{ secrets.STW2_KEY }}' | base64 -d)" >> $HOME/.ssh/known_hosts
-        
-        # Save private key to a file
-        Set-Content -Path "$HOME/.ssh/private_key" -Value '${{ secrets.STW2_KEY }}' -Encoding ASCII
-    
         # Log SSH command
-        $sshCommand = "ssh -i $HOME/.ssh/private_key -o BatchMode=yes -o StrictHostKeyChecking=yes $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
+        $sshCommand = "ssh $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
         Write-Host "Running SSH command: $sshCommand"
     
         # Run SSH command
         Invoke-Expression -Command $sshCommand
-
-        Write-Host "Clossing SSH Session"
-        exit
-        
-        
