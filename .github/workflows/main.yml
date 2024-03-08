@@ -32,7 +32,7 @@ jobs:
         Write-Host "Local Repo Path: $localRepoPath"
         
         # Log SSH command
-        $sshCommand = "ssh -v -o BatchMode=yes $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
+        $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main'"
         Write-Host "Running SSH command: $sshCommand"
     
         # Run SSH command
