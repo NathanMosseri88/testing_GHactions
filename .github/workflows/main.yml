@@ -33,7 +33,7 @@ jobs:
         
         # Log SSH command
         # $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main && cmd /c say_hello.bat'"
-        $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'ubuntu && cd /mnt/c/Users/SimpleToWork/Desktop/New Projects/testing_GHactions && pwd'"
+        $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'bash -c \"cd /mnt/c/Users/SimpleToWork/Desktop/New Projects/testing_GHactions\" && git pull origin main'"
         Write-Host "Running SSH command: $sshCommand"
     
         # Run SSH command
