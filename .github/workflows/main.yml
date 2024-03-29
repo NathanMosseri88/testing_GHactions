@@ -1,5 +1,6 @@
 name: Testing CI/CD to STW2
 
+# Defines when to run this workflow - In this case, whenever a change is made to the main branch
 on:
   push:
     branches: [ "main" ]
@@ -7,31 +8,30 @@ on:
     branches: [ "main" ]
 
 jobs:
-  update-local-repo:
+#  name of job
+  update-server-repo:
+#    tells GitHub what runner to use for the following steps
     runs-on: windows-latest
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
+#   creates a file in the GitHub runner to store the private key from GitHub repo secrets
     - name: Create SSH Key File
       run: |
         mkdir -p $HOME/.ssh
         echo '${{secrets.STW2_KEY}}' > $HOME/.ssh/id_ed25519
         chmod 600 $HOME/.ssh/id_ed25519
 
-    - name: Update Local Repo
+#   Step to connect and update server repo
+    - name: Update Server Repo
       run: |
         $serverAddress = "${{ secrets.STW2_IP }}"
         $serverUser = "${{ secrets.STW2_USER }}"
         $localRepoPath = '${{ secrets.STW2_FILE_PATH }}'
-        
-        # Log server details for debugging
-        Write-Host "Server Address: $serverAddress"
-        Write-Host "Server User: $serverUser"
-        Write-Host "Local Repo Path: $localRepoPath"
-        
-        # Log SSH command
+
+#       SSH command - the commands in single quotes will be run in the server once the connection is made
         $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main && cmd /c through_ssh.bat'"
         Write-Host "Running SSH command: $sshCommand"
     
