@@ -30,8 +30,8 @@ jobs:
         $serverAddress = "${{ secrets.STW2_IP }}"
         $serverUser = "${{ secrets.STW2_USER }}"
         $localRepoPath = '${{ secrets.STW2_FILE_PATH }}'
-
-#       SSH command - the commands in single quotes will be run in the server once the connection is made
+        
+        # SSH command - commands in single quotes will be run on the server after connection is made
         $sshCommand = "ssh -v -o StrictHostKeyChecking=no $serverUser@$serverAddress 'cd $localRepoPath && git pull origin main && cmd /c through_ssh.bat'"
         Write-Host "Running SSH command: $sshCommand"
     
